@@ -1,18 +1,34 @@
-import React from 'react';
-import { FlatList, Text, View, StatusBar } from 'react-native';
+import React, { Component } from 'react';
+import { FlatList, View, StatusBar } from 'react-native';
 
+import { ListItem, Separator } from '../components/List';
 import currencies from '../data/currencies';
 
-const CurrencyList = () => (
-  <View style={{ flex: 1 }}>
-    <StatusBar translucent={false} barStyle="default" />
+class CurrencyList extends Component {
+  handlePress() {
+    console.log('Pressed');
+  }
 
-    <FlatList
-      data={currencies}
-      renderItem={({ item }) => <Text>{item}</Text>}
-      keyExtractor={item => item}
-    />
-  </View>
-);
+  render() {
+    return (
+      <View style={{ flex: 1 }}>
+        <StatusBar translucent={false} barStyle="default" />
+
+        <FlatList
+          data={currencies}
+          renderItem={({ item }) => (
+            <ListItem
+              text={item}
+              selected={item === 'CAD'}
+              onPress={this.handlePress}
+            />
+          )}
+          keyExtractor={item => item}
+          ItemSeparatorComponent={Separator}
+        />
+      </View>
+    );
+  }
+}
 
 export default CurrencyList;

@@ -41,9 +41,9 @@ class Home extends Component {
     console.log('Swap Currency');
   }
 
-  handleOptionsPress() {
-    console.log('Press Options');
-  }
+  handleOptionsPress = () => {
+    this.props.navigation.navigate('Options');
+  };
 
   render() {
     return (

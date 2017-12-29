@@ -5,12 +5,19 @@ import { View, Text, TouchableHighlight } from 'react-native';
 import Icon from './Icon';
 import styles from './styles';
 
-const ListItem = ({ text, selected, onPress, customIcon = null }) => (
+const ListItem = ({
+  text,
+  visible = true,
+  selected = false,
+  onPress,
+  customIcon = null,
+  iconBackground,
+}) => (
   <TouchableHighlight onPress={onPress} underlayColor={styles.$underlayColor}>
     <View style={styles.row}>
       <Text style={styles.text}>{text}</Text>
 
-      <Icon selected={selected} />
+      <Icon selected={selected} visible={visible} background={iconBackground} />
       {customIcon}
     </View>
   </TouchableHighlight>
@@ -18,9 +25,11 @@ const ListItem = ({ text, selected, onPress, customIcon = null }) => (
 
 ListItem.propTypes = {
   text: propTypes.string,
+  visible: propTypes.bool,
   selected: propTypes.bool,
   onPress: propTypes.func,
   customIcon: propTypes.element,
+  iconBackground: propTypes.string,
 };
 
 export default ListItem;

@@ -4,16 +4,20 @@ import { View, Image } from 'react-native';
 
 import styles from './styles';
 
-const Icon = ({ selected }) => {
+const Icon = ({
+  visible = true,
+  selected = false,
+  background = styles.$backgroundIconColor,
+}) => {
   let iconStyles = styles.iconContainer;
 
-  if (selected) {
-    iconStyles = [iconStyles, { backgroundColor: styles.$backgroundIconColor }];
+  if (visible) {
+    iconStyles = [iconStyles, { backgroundColor: background }];
   }
 
   return (
     <View style={iconStyles}>
-      {selected ? (
+      {selected && visible ? (
         <Image
           resizeMode="contain"
           source={require('./images/check.png')}
@@ -25,7 +29,9 @@ const Icon = ({ selected }) => {
 };
 
 Icon.propTypes = {
+  visible: propTypes.bool,
   selected: propTypes.bool,
+  background: propTypes.string,
 };
 
 export default Icon;

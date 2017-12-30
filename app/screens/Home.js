@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { View, StatusBar, KeyboardAvoidingView } from 'react-native';
+import { connect } from 'react-redux';
 
 import { Container } from '../components/Container';
 import { Header } from '../components/Header';
@@ -8,6 +9,7 @@ import { Logo } from '../components/Logo';
 import { InputWithButton } from '../components/TextInput';
 import { LastConverted } from '../components/Texts';
 import { ClearButton } from '../components/Buttons';
+import { changeCurrencyAmount, swapCurrencies } from '../actions/currencies';
 
 const DEFAULT_BASE_CURRENCY = 'USD';
 const DEFAULT_QUOTE_CURRENCY = 'GBP';
@@ -19,6 +21,7 @@ const DEFAULT_EXCHANGE_DATE = new Date();
 class Home extends Component {
   static propTypes = {
     navigation: propTypes.object,
+    dispatch: propTypes.func,
   };
 
   handlePressBaseCurrency = () => {
@@ -33,13 +36,13 @@ class Home extends Component {
     });
   };
 
-  handleTextChange(text) {
-    console.log('Text Changed', text);
-  }
+  handleTextChange = amount => {
+    this.props.dispatch(changeCurrencyAmount(amount));
+  };
 
-  handleSwapCurrency() {
-    console.log('Swap Currency');
-  }
+  handleSwapCurrency = () => {
+    this.props.dispatch(swapCurrencies());
+  };
 
   handleOptionsPress = () => {
     this.props.navigation.navigate('Options');
@@ -87,4 +90,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default connect()(Home);

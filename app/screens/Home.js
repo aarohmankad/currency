@@ -11,17 +11,16 @@ import { LastConverted } from '../components/Texts';
 import { ClearButton } from '../components/Buttons';
 import { changeCurrencyAmount, swapCurrencies } from '../actions/currencies';
 
-const DEFAULT_BASE_CURRENCY = 'USD';
-const DEFAULT_QUOTE_CURRENCY = 'GBP';
-const DEFAULT_BASE_PRICE = '100';
-const DEFAULT_QUOTE_PRICE = '79.74';
-const DEFAULT_EXCHANGE_RATE = 0.7974;
-const DEFAULT_EXCHANGE_DATE = new Date();
-
 class Home extends Component {
   static propTypes = {
     navigation: propTypes.object,
     dispatch: propTypes.func,
+    baseCurrency: propTypes.string,
+    quoteCurrency: propTypes.string,
+    rate: propTypes.number,
+    date: propTypes.object,
+    amount: propTypes.string,
+    isFetching: propTypes.bool,
   };
 
   handlePressBaseCurrency = () => {
@@ -48,7 +47,21 @@ class Home extends Component {
     this.props.navigation.navigate('Options');
   };
 
-  render() {
+  render = () => {
+    const {
+      baseCurrency,
+      quoteCurrency,
+      rate,
+      date,
+      amount,
+      isFetching,
+    } = this.props;
+    let quotePrice = (amount * rate).toFixed(2);
+
+    if (isFetching) {
+      quotePrice = '...';
+    }
+
     return (
       <Container>
         <StatusBar translucent={true} barStyle="light-content" />
@@ -59,25 +72,25 @@ class Home extends Component {
           <Logo />
 
           <InputWithButton
-            buttonText={DEFAULT_BASE_CURRENCY}
+            buttonText={baseCurrency}
             onPress={this.handlePressBaseCurrency}
-            defaultValue={DEFAULT_BASE_PRICE}
+            defaultValue={amount}
             keyboardType="numeric"
             onChangeText={this.handleTextChange}
           />
 
           <InputWithButton
-            buttonText={DEFAULT_QUOTE_CURRENCY}
+            buttonText={quoteCurrency}
             onPress={this.handlePressQuoteCurrency}
-            value={DEFAULT_QUOTE_PRICE}
+            value={quotePrice}
             editable={false}
           />
 
           <LastConverted
-            base={DEFAULT_BASE_CURRENCY}
-            quote={DEFAULT_QUOTE_CURRENCY}
-            exchangeRate={DEFAULT_EXCHANGE_RATE}
-            date={DEFAULT_EXCHANGE_DATE}
+            base={baseCurrency}
+            quote={quoteCurrency}
+            exchangeRate={rate}
+            date={date}
           />
 
           <ClearButton
@@ -87,7 +100,24 @@ class Home extends Component {
         </KeyboardAvoidingView>
       </Container>
     );
-  }
+  };
 }
 
-export default connect()(Home);
+const mapStateToProps = state => {
+  const { baseCurrency, quoteCurrency, amount } = state.currencies;
+  const conversionSelector = state.currencies.conversions[baseCurrency] || {};
+  const rates = conversionSelector.rates || {};
+
+  return {
+    baseCurrency,
+    quoteCurrency,
+    rate: rates[quoteCurrency] || 0,
+    date: conversionSelector.date
+      ? new Date(conversionSelector.date)
+      : new Date(),
+    amount: amount.toString(),
+    isFetching: conversionSelector.isFetching,
+  };
+};
+
+export default connect(mapStateToProps)(Home);

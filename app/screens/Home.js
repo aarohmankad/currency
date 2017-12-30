@@ -17,6 +17,7 @@ class Home extends Component {
     dispatch: propTypes.func,
     baseCurrency: propTypes.string,
     quoteCurrency: propTypes.string,
+    primaryColor: propTypes.string,
     rate: propTypes.number,
     date: propTypes.object,
     amount: propTypes.string,
@@ -53,6 +54,7 @@ class Home extends Component {
     const {
       baseCurrency,
       quoteCurrency,
+      primaryColor,
       rate,
       date,
       amount,
@@ -65,13 +67,13 @@ class Home extends Component {
     }
 
     return (
-      <Container>
+      <Container primaryColor={primaryColor}>
         <StatusBar translucent={true} barStyle="light-content" />
 
         <Header onPress={this.handleOptionsPress} />
 
         <KeyboardAvoidingView behavior="padding">
-          <Logo />
+          <Logo tintColor={primaryColor} />
 
           <InputWithButton
             buttonText={baseCurrency}
@@ -79,13 +81,15 @@ class Home extends Component {
             defaultValue={amount}
             keyboardType="numeric"
             onChangeText={this.handleTextChange}
+            textColor={primaryColor}
+            editable
           />
 
           <InputWithButton
             buttonText={quoteCurrency}
             onPress={this.handlePressQuoteCurrency}
             value={quotePrice}
-            editable={false}
+            textColor={primaryColor}
           />
 
           <LastConverted
@@ -107,12 +111,14 @@ class Home extends Component {
 
 const mapStateToProps = state => {
   const { baseCurrency, quoteCurrency, amount } = state.currencies;
+  const { primaryColor } = state.themes;
   const conversionSelector = state.currencies.conversions[baseCurrency] || {};
   const rates = conversionSelector.rates || {};
 
   return {
     baseCurrency,
     quoteCurrency,
+    primaryColor,
     rate: rates[quoteCurrency] || 0,
     date: conversionSelector.date
       ? new Date(conversionSelector.date)

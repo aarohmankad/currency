@@ -13,6 +13,7 @@ const initialState = {
   quoteCurrency: 'GBP',
   amount: 100,
   conversions: {},
+  error: null,
 };
 
 const setConversions = (state, action) => {
@@ -77,7 +78,10 @@ const reducer = (state = initialState, action) => {
         },
       };
     case CONVERSION_ERROR:
-      return state;
+      return {
+        ...state,
+        error: action.error,
+      };
     default:
       return state;
   }

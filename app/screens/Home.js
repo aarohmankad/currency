@@ -14,11 +14,13 @@ import {
   changeCurrencyAmount,
   swapCurrencies,
 } from '../actions/currencies';
+import { connectAlert } from '../components/Alert';
 
 class Home extends Component {
   static propTypes = {
     navigation: propTypes.object,
     dispatch: propTypes.func,
+    alertWithType: propTypes.func,
     baseCurrency: propTypes.string,
     quoteCurrency: propTypes.string,
     primaryColor: propTypes.string,
@@ -26,6 +28,7 @@ class Home extends Component {
     date: propTypes.object,
     amount: propTypes.string,
     isFetching: propTypes.bool,
+    conversionError: propTypes.string,
   };
 
   handlePressBaseCurrency = () => {
@@ -56,6 +59,12 @@ class Home extends Component {
 
   componentWillMount = () => {
     this.props.dispatch(getInitialConversion());
+  };
+
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.conversionError) {
+      this.props.alertWithType('error', 'Error', nextProps.conversionError);
+    }
   };
 
   render = () => {
@@ -118,7 +127,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => {
-  const { baseCurrency, quoteCurrency, amount } = state.currencies;
+  const { baseCurrency, quoteCurrency, amount, error } = state.currencies;
   const { primaryColor } = state.themes;
   const conversionSelector = state.currencies.conversions[baseCurrency] || {};
   const rates = conversionSelector.rates || {};
@@ -133,7 +142,8 @@ const mapStateToProps = state => {
       : new Date(),
     amount: amount.toString(),
     isFetching: conversionSelector.isFetching,
+    conversionError: error,
   };
 };
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(connectAlert(Home));

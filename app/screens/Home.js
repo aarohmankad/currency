@@ -9,7 +9,11 @@ import { Logo } from '../components/Logo';
 import { InputWithButton } from '../components/TextInput';
 import { LastConverted } from '../components/Texts';
 import { ClearButton } from '../components/Buttons';
-import { changeCurrencyAmount, swapCurrencies } from '../actions/currencies';
+import {
+  getInitialConversion,
+  changeCurrencyAmount,
+  swapCurrencies,
+} from '../actions/currencies';
 
 class Home extends Component {
   static propTypes = {
@@ -48,6 +52,10 @@ class Home extends Component {
 
   handleOptionsPress = () => {
     this.props.navigation.navigate('Options');
+  };
+
+  componentWillMount = () => {
+    this.props.dispatch(getInitialConversion());
   };
 
   render = () => {

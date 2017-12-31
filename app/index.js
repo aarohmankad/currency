@@ -13,6 +13,7 @@ EStyleSheet.build({
   $primaryOrange: '#D57A66',
   $primaryGreen: '#00BD9D',
   $primaryPurple: '#9E768F',
+  $primaryBlack: '#000000',
   $border: '#E2E2E2',
   $inputText: '#797979',
   $darkText: '#343434',

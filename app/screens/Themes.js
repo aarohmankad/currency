@@ -12,6 +12,7 @@ const styles = EStyleSheet.create({
   $green: '$primaryGreen',
   $orange: '$primaryOrange',
   $purple: '$primaryPurple',
+  $black: '$primaryBlack',
 });
 
 class Themes extends Component {
@@ -59,6 +60,13 @@ class Themes extends Component {
           onPress={() => this.handleThemePress(styles.$purple)}
           iconBackground={styles.$purple}
           selected={primaryColor === styles.$purple}
+        />
+        <Separator />
+        <ListItem
+          text="Black"
+          onPress={() => this.handleThemePress(styles.$black)}
+          iconBackground={styles.$black}
+          selected={primaryColor === styles.$black}
         />
         <Separator />
       </ScrollView>
